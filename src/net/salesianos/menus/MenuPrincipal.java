@@ -1,5 +1,8 @@
 package net.salesianos.menus;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -7,6 +10,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import net.salesianos.crud.Anadir;
 
 public class MenuPrincipal extends JFrame {
 
@@ -44,6 +49,36 @@ public class MenuPrincipal extends JFrame {
         panelOpcion.add(etiqueta);
 
         panelOpcion.add(Box.createHorizontalStrut(10)); // 10 píxeles de espacio
+
+        boton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                switch (texto) {
+                    case "Anadir":
+                        Anadir ventanaAnadir = new Anadir();
+                        break;
+                    case "Editar":
+
+                        break;
+                    case "Mostrar":
+
+                        break;
+                    case "Eliminar":
+
+                        break;
+                    case "Salir":
+
+                        break;
+
+                    default:
+                        break;
+                }
+
+            }
+
+        });
 
         panelOpcion.add(boton);
 

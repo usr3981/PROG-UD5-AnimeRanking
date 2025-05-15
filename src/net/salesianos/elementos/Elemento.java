@@ -1,12 +1,12 @@
 package net.salesianos.elementos;
 
-public class Elementos {
+public class Elemento {
     private String codigo;
     private String titulo;
     private String descripcion;
     private byte puntuacion;
 
-    public Elementos(String codigo, String titulo, String descripcion, byte puntuacion) {
+    public Elemento(String codigo, String titulo, String descripcion, byte puntuacion) {
         this.codigo = codigo;
         this.titulo = titulo;
         this.descripcion = descripcion;
