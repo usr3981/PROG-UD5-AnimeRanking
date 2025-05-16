@@ -1,6 +1,3 @@
-import java.util.ArrayList;
-
-import net.salesianos.elementos.Elemento;
 import net.salesianos.menus.MenuPrincipal;
 
 public class App {
