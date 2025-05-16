@@ -9,6 +9,6 @@ public class Validacion {
 
     // Verifica si el número está en el rango 0 a 5 (inclusive)
     public static boolean validarCampoNumerico(int datoIngresado) {
-        return datoIngresado >= 0 && datoIngresado <= 5;
+        return datoIngresado < 0 || datoIngresado > 5;
     }
 }
