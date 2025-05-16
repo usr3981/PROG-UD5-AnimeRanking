@@ -6,85 +6,96 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import net.salesianos.elementos.Elemento;
+import net.salesianos.menus.MenuPrincipal;
+import net.salesianos.validaciones.Validacion;
 
 public class Anadir extends JFrame {
 
     public Anadir() {
         super("Añadir Anime");
 
-        // Panel principal con layout en columna
-        JPanel panelAnadir = new JPanel();
-        panelAnadir.setLayout(new BoxLayout(panelAnadir, BoxLayout.Y_AXIS));
+        // Panel principal con BorderLayout
+        JPanel panelAnadir = new JPanel(new BorderLayout(10, 10));
         panelAnadir.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Etiqueta principal
+        // Panel del contenido (campos + título)
+        JPanel panelContenido = new JPanel();
+        panelContenido.setLayout(new BoxLayout(panelContenido, BoxLayout.Y_AXIS));
+
         JLabel tituloVentana = new JLabel("Añadir nuevo Anime");
         tituloVentana.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panelAnadir.add(tituloVentana);
-        panelAnadir.add(Box.createRigidArea(new Dimension(0, 10)));
+        panelContenido.add(tituloVentana);
+        panelContenido.add(Box.createRigidArea(new Dimension(0, 10)));
 
-        // Campos de entrada
         JTextField campoCodigo = new JTextField(20);
         JTextField campoTitulo = new JTextField(20);
         JTextField campoDescripcion = new JTextField(20);
         JTextField campoPuntuacion = new JTextField(20);
 
-        panelAnadir.add(crearFila("Código:", campoCodigo));
-        panelAnadir.add(crearFila("Título:", campoTitulo));
-        panelAnadir.add(crearFila("Descripción:", campoDescripcion));
-        panelAnadir.add(crearFila("Puntuación (0-5):", campoPuntuacion));
+        panelContenido.add(crearFila("Código:", campoCodigo));
+        panelContenido.add(crearFila("Título:", campoTitulo));
+        panelContenido.add(crearFila("Descripción:", campoDescripcion));
+        panelContenido.add(crearFila("Puntuación (0-5):", campoPuntuacion));
 
-        // Botón Guardar
+        // Panel de botones abajo
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         JButton botonGuardar = new JButton("Guardar");
-        botonGuardar.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JButton botonVolver = new JButton("Volver");
 
         botonGuardar.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 String codigo = campoCodigo.getText();
                 String titulo = campoTitulo.getText();
                 String descripcion = campoDescripcion.getText();
-                byte puntuacion;
+                String puntuacionTexto = campoPuntuacion.getText();
 
-                try {
-                    puntuacion = Byte.parseByte(campoPuntuacion.getText());
-
-                    // Validar rango
-                    if (puntuacion < 0 || puntuacion > 5) {
-                        throw new NumberFormatException("La puntuación debe estar entre 0 y 5.");
-                    }
-
-                    Elemento nuevo = new Elemento(codigo, titulo, descripcion, puntuacion);
-                    System.out.println("Elemento creado:");
-                    System.out.println("Código: " + nuevo.getCodigo());
-                    System.out.println("Título: " + nuevo.getTitulo());
-                    System.out.println("Descripción: " + nuevo.getDescripcion());
-                    System.out.println("Puntuación: " + nuevo.getPuntuacion());
-
-                    campoCodigo.setText("");
-                    campoTitulo.setText("");
-                    campoDescripcion.setText("");
-                    campoPuntuacion.setText("");
-
-                    JOptionPane.showMessageDialog(null, "Anime guardado correctamente");
-
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(null, "Puntuación inválida. Debe ser un número entre 0 y 5.");
+                if (!Validacion.validarCampoTexto(codigo) ||
+                        !Validacion.validarCampoTexto(titulo) ||
+                        !Validacion.validarCampoTexto(descripcion) ||
+                        !Validacion.validarCampoTexto(puntuacionTexto)) {
+                    JOptionPane.showMessageDialog(null, "Por favor, rellena todos los campos correctamente.");
+                    return;
                 }
+
+                byte puntuacion;
+                try {
+                    puntuacion = Byte.parseByte(puntuacionTexto);
+                    if (Validacion.validarCampoNumerico(puntuacion)) {
+                        throw new NumberFormatException();
+                    }
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "La puntuación debe ser un número entre 0 y 5.");
+                    return;
+                }
+
+                Elemento nuevo = new Elemento(codigo, titulo, descripcion, puntuacion);
+                MenuPrincipal.listaElementos.add(nuevo);
+
+                campoCodigo.setText("");
+                campoTitulo.setText("");
+                campoDescripcion.setText("");
+                campoPuntuacion.setText("");
+
+                JOptionPane.showMessageDialog(null, "Anime guardado correctamente");
             }
         });
 
-        panelAnadir.add(Box.createRigidArea(new Dimension(0, 5)));
-        panelAnadir.add(botonGuardar);
+        botonVolver.addActionListener(e -> dispose());
+
+        panelBotones.add(botonGuardar);
+        panelBotones.add(botonVolver);
+
+        // Añadir contenido y botones al panel principal
+        panelAnadir.add(panelContenido, BorderLayout.CENTER);
+        panelAnadir.add(panelBotones, BorderLayout.SOUTH);
 
         this.add(panelAnadir);
-        this.setSize(350, 300);
+        this.setSize(400, 300);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setVisible(true);
     }
 
-    // Método para crear una fila con etiqueta y campo de texto
     private JPanel crearFila(String etiquetaTexto, JTextField campoTexto) {
         JPanel fila = new JPanel(new BorderLayout(5, 5));
         JLabel etiqueta = new JLabel(etiquetaTexto);
