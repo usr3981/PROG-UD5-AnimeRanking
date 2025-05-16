@@ -2,6 +2,7 @@ package net.salesianos.menus;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -12,8 +13,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import net.salesianos.crud.Anadir;
+import net.salesianos.crud.Editar;
+import net.salesianos.crud.Eliminar;
+import net.salesianos.crud.Mostrar;
+import net.salesianos.elementos.Elemento;
 
 public class MenuPrincipal extends JFrame {
+
+    public static ArrayList<Elemento> listaElementos = new ArrayList<>();
 
     public MenuPrincipal() {
 
@@ -60,13 +67,14 @@ public class MenuPrincipal extends JFrame {
                         Anadir ventanaAnadir = new Anadir();
                         break;
                     case "Editar":
-
+                        Editar ventanaEditar = new Editar();
                         break;
                     case "Mostrar":
+                        Mostrar mostrar = new Mostrar();
 
                         break;
                     case "Eliminar":
-
+                        Eliminar eliminar = new Eliminar();
                         break;
                     case "Salir":
 
@@ -95,6 +103,13 @@ public class MenuPrincipal extends JFrame {
         // Componentes del item
         JLabel etiqueta = new JLabel(texto + " del programa");
         JButton boton = new JButton(texto);
+
+        boton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose(); // Cierra la ventana principal
+            }
+        });
 
         panelOpcion.add(etiqueta);
 
